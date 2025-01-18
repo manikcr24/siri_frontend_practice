@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List</title>
+    <!-- <script src="./script.js"></script> -->
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .todo-list {
+        list-style-type: none;
+        padding: 0;
+      }
+      .todo-item {
+        background: #f9f9f9;
+        margin: 5px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Todo List</h1>
+    <ul id="todoitems" class="todo-list"></ul>
+  </body>
+
+  <script>
+    fetch("https://jsonplaceholder.typicode.com/todos")
+      .then((response) => response.json())
+      .then((todos) => {
+        console.log(todos);
+
+        for (var i = 0; i < todos.length; i++) {
+          var liElement = document.createElement("li");
+          liElement.className = "todo-item";
+          liElement.innerText = todos[i]['title'];
+          var ulElement = document.getElementById("todoitems");
+          ulElement.appendChild(liElement);
+        }
+      });
+  </script>
+</html>
