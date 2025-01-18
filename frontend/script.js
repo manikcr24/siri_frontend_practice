@@ -12,3 +12,5 @@ liElement.innerText = 'Buy groceries';
 var ulElement = document.getElementById('todoitems');
 ulElement.appendChild(liElement);
 
+// Adding multiple items
+
