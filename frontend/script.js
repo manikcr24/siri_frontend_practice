@@ -16,3 +16,4 @@ ulElement.appendChild(liElement);
 
 console.log("sirikanta")
 console.log(greetUser("Mani"))
+console.log(greetUser("Siri"))
