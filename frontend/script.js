@@ -9,8 +9,11 @@ liElement.className = 'todo-item';
 liElement.innerText = 'Buy groceries';
 
 
-var ulElement = document.getElementById('todoitems');
+var ulElement = document.getElementById('todoitems9');
 ulElement.appendChild(liElement);
 
-// Adding multiple items
 
+
+console.log("sirikanta")
+console.log(greetUser("Mani"))
+console.log(greetUser("Siri"))
