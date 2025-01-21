@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Get and display employee details</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .todo-list {
+        list-style-type: none;
+        padding: 0;
+      }
+      .todo-item {
+        background: #f9f9f9;
+        margin: 5px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Employee:</h1>
+    <ul></ul> 
+  </body>
+
+  <script>
+    fetch("http://localhost:2025/employeedetails")
+    .then((response) => response.json())
+      .then((data) => {
+        data.forEach(employeedetails => {
+            const details = '<li>'+employeedetails.name+'</li>';
+            document.querySelector('ul').insertAdjacentHTML('beforeend', details);
+        })
+      })
+       
+       </script>
+</html>
