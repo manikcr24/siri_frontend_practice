@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Send data to the backend</title>
+    <style>
+        input{
+            margin:10px 0px;
+        }
+    </style>
+    </head> 
+    <body>
+        <label>Name <input type="text" class="userName"/></label><br/>
+        <label>Email <input type="email" class="userEmail"/></label><br/>
+        <label>City <input type="text" class="userCity"/></label><br/>
+        <button> Send data</button>
+
+    <script>
+         var myName=document.querySelector(".userName");
+         var myEmail=document.querySelector(".userEmail");
+         var myCity=document.querySelector(".userCity");
+         var button=document.querySelector("button");
+
+         button.addEventListener("click",()=>{
+
+            var obj = {
+                name:myName.value,
+                email:myEmail.value,
+                city:myCity.value
+            };
+
+            fetch("/contacts",{
+                method:"POST",
+                headers:{
+                    "content-type":"application/json"
+                },
+                body:JSON.stringify(obj)
+            });
+         })
+
+    </script>
+
+    </body>
+    </html>
