@@ -1,54 +1,49 @@
 const express = require('express');
+const database = require('./database')
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
 
-let students = [];
-
 // Get all students
 app.get('/students', (req, res) => {
-    res.json(students);
+    // LOAD DATA FROM STUDENT TABLE
+    // RETURN IT 
+    database.getAllStudents().then(result => {
+        console.log(result);
+        res.json(result);
+    })
 });
 
 // Get a student by ID
 app.get('/students/:id', (req, res) => {
-    const student = students.find(s => s.id === parseInt(req.params.id));
-    if (!student) return res.status(404).send('Student not found');
-    res.json(student);
+    let studentId = req.params.id
+    let result = database.getStudentById(studentId)
+    database.getStudentById(studentId).then(result => {
+        res.json(result)
+    })
 });
 
 // Create a new student
 app.post('/students', (req, res) => {
-    const student = {
-        id: students.length + 1,
+    let student = {
         name: req.body.name,
-        age: req.body.age,
-        course: req.body.course
-    };
-    students.push(student);
-    res.status(201).json(student);
+        email: req.body.email 
+    }
+    database.createStudent(student).then(result => {
+        res.json(result)
+    })
 });
 
 // Update a student by ID
 app.put('/students/:id', (req, res) => {
-    const student = students.find(s => s.id === parseInt(req.params.id));
-    if (!student) return res.status(404).send('Student not found');
-
-    student.name = req.body.name;
-    student.age = req.body.age;
-    student.course = req.body.course;
-    res.json(student);
+    // TODO SIRI
 });
 
 // Delete a student by ID
 app.delete('/students/:id', (req, res) => {
-    const studentIndex = students.findIndex(s => s.id === parseInt(req.params.id));
-    if (studentIndex === -1) return res.status(404).send('Student not found');
-
-    const deletedStudent = students.splice(studentIndex, 1);
-    res.json(deletedStudent);
+    // TODO SIRI
 });
 
 app.listen(port, () => {

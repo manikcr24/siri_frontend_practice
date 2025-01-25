@@ -1,55 +1,58 @@
 const mysql = require('mysql2/promise');
 
-const dbConfig = {
+const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: 'admin',
     database: 'app_db'
-};
+});
 
 async function createStudent(student) {
-    const connection = await mysql.createConnection(dbConfig);
-    const [result] = await connection.execute(
-        'INSERT INTO student (name, age, grade) VALUES (?, ?, ?)',
-        [student.name, student.age, student.grade]
-    );
-    await connection.end();
+    const { name, email } = student;
+    const [result] = await pool.query('INSERT INTO students (name, email) VALUES (?, ?)', [name, email]);
     return result.insertId;
 }
 
 async function getStudentById(id) {
-    const connection = await mysql.createConnection(dbConfig);
-    const [rows] = await connection.execute(
-        'SELECT * FROM student WHERE id = ?',
-        [id]
-    );
-    await connection.end();
+    const [rows] = await pool.query('SELECT * FROM students WHERE id = ?', [id]);
     return rows[0];
 }
 
+async function getAllStudents() {
+    const [rows] = await pool.query('SELECT * FROM students');
+    return rows;
+}
+
 async function updateStudent(id, student) {
-    const connection = await mysql.createConnection(dbConfig);
-    const [result] = await connection.execute(
-        'UPDATE student SET name = ?, age = ?, grade = ? WHERE id = ?',
-        [student.name, student.age, student.grade, id]
-    );
-    await connection.end();
-    return result.affectedRows;
+    const { name, email } = student;
+    const [result] = await pool.query('UPDATE students SET name = ?, email = ? WHERE id = ?', [name, email, id]);
+    return result.affectedRows > 0;
 }
 
 async function deleteStudent(id) {
-    const connection = await mysql.createConnection(dbConfig);
-    const [result] = await connection.execute(
-        'DELETE FROM student WHERE id = ?',
-        [id]
-    );
-    await connection.end();
-    return result.affectedRows;
+    const [result] = await pool.query('DELETE FROM students WHERE id = ?', [id]);
+    return result.affectedRows > 0;
 }
 
 module.exports = {
     createStudent,
     getStudentById,
+    getAllStudents,
     updateStudent,
     deleteStudent
 };
+
+
+// getAllStudents().then(res => console.log(res));
+
+// let studentId = 1;
+// let newStudentData = {
+//     "name": "Manikanta CHERUKU",
+//     "email": "manik.cr24@gmail.com"
+// }
+// updateStudent(studentId, newStudentData).then(res => console.log(res));
+
+// createStudent({
+//     name: 'RV',
+//     email: 'test@gmai.com'
+// }).then(res => console.log(res));
