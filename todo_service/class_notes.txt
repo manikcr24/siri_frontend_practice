@@ -1,0 +1,30 @@
+
+TODOS
+ID  DESCRIPTION     STATUS          USER_ID
+1   Task 1          In Progress     2
+2   Task 2          Done            3
+3   Task 3          In Progress     3
+4   Test project    New             4
+
+
+
+USERS
+ID  NAME  EMAIL
+1   John  john@example.com
+2   Jane  jane@example.com
+3   Siri  siri@gmai.com
+4   Mani  mani@gmc.com
+
+
+CREATE USER         --  POST /users
+READ USER           --  GET /users/:id
+READ ALL USERS      --  GET /users
+DELETE USER         --  DELETE /user/:id
+UPDATE USER INFO    --  PATCH /user/:id
+
+
+CREATE TODO         -- POST /todos
+READ TODO           -- GET /todos?user_id=2&status=in_progress --> SELECT * FROM TODOS WHERE USER_ID = 2 and STATS = 'In Progress'
+UPDATE TODO INFO    -- PUT /todos/:id
+DELETE TODO         -- DELETE /todos/:id
+
