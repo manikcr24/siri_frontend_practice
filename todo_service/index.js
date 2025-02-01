@@ -100,8 +100,21 @@ app.get('/users/:id', (req, res) => {
 
 
   app.get('/todos', (req, res) => {
-    const query = 'select * from todos';
-    db.query(query, (err, results) => {
+    console.log(req.query)
+    let user_id = req.query.user_id
+    let status = req.query.status
+
+    if(user_id == undefined) {
+      return res.status(400).send({ message : 'user_id is required'})
+    }
+
+    let query = 'select * from todos where user_id = ?'
+
+    if(status != undefined) {
+        query += ` and status = ?`
+    }
+
+    db.query(query, [user_id, status], (err, results) => {
         if (err){
             console.error('error retrieving todos :', err);
             res.status(500).send({ message : 'error retrieving todos'});
@@ -122,7 +135,7 @@ app.get('/todos/:user_id', (req, res) => {
         console.error('Error retrieving todos', err);
         res.status(500).send({ message: 'Error retrieving todos' });
       } else {
-        res.send(results[0]);
+        res.send(results);
       }
     });
   });
