@@ -1,0 +1,23 @@
+create database app_db;
+  use app_db;
+  create table users(id int not null auto_increment primary key, name varchar(255), email varchar(255));
+  insert into users values ( 101, 'mani' , 'mani101@gmail.com');
+   insert into users values ( 102, 'subbu' , 'subbu102@gmail.com');
+    insert into users values ( 103, 'manikanta cheruku' , 'manik.cr24@gmail.com'); 
+    insert into users values ( 104, 'siri' , 'siri1109@gmail.com');
+    select * from users;
+    
+   
+   
+   create table todos( id int not null auto_increment primary key, description varchar(255), status varchar(255), user_id int, foreign key(user_id) references users(id));
+   insert into todos values(1, 'task-1', 'in progress', 102);
+   insert into todos values(2, 'task-2', 'Done', 103);
+   insert into todos values(3, 'task-3', 'in progress', 103);
+   insert into todos values(4, 'task-4', 'New task', 101);
+   select * from todos;
+   
+    
+    
+    
+
+  
