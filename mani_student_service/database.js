@@ -4,7 +4,7 @@ const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: 'admin',
-    database: 'app_db'
+    database: 'my_db'
 });
 
 async function createStudent(student) {

@@ -38,6 +38,11 @@ app.post('/students', (req, res) => {
 
 // Update a student by ID
 app.put('/students/:id', (req, res) => {
+    const studentId = req.params.id;
+    const studentdata =req.body;
+    database.updateStudent(studentId, studentdata).then(result => {
+        res.json(result)
+    })
     // TODO SIRI
 });
 
