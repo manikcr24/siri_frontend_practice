@@ -206,5 +206,7 @@ function logRequest(req) {
   console.log('URL PARAMS:', req.params)
   console.log('BODY:', req.body)
   console.log('HEADERS:', req.headers)
+  console.log('HOST:', req.hostname)
+  console.log('STATUS:', req.status)
   console.log(' ****************** \n\n')
 }
