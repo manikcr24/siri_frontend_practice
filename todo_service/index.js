@@ -99,10 +99,7 @@ app.get('/users/:id', (req, res) => {
 
 
 
-  app.get('/todos', (req, res, next) => {
-    logRequest(req)
-    next()
-  }, (req, res) => {
+  app.get('/todos', logRequestMiddleware, (req, res) => {
     let user_id = req.query.user_id
     let status = req.query.status
 
@@ -143,10 +140,7 @@ app.get('/todos/:user_id', (req, res) => {
   });
 
 
-  app.post('/todos', (req, res, next) => {
-    logRequest(req)
-    next()
-  }, (req, res) => {
+  app.post('/todos', logRequestMiddleware, authenticateRequest, validateTodoRequest, (req, res) => {
     const todolist = req.body;
     const query = 'insert into  todos set ?';
     db.query(query, todolist, (err, results) => {
@@ -198,7 +192,7 @@ app.listen(3000, () => {
 
 
 
-function logRequest(req) {
+function logRequestMiddleware(req, res, next) {
   console.log('\n\n ******************')
   console.log('RECEIVED REQUEST ON: ', req.route.path)
   console.log('REQUEST METHOD: ', req.method)
@@ -207,4 +201,39 @@ function logRequest(req) {
   console.log('BODY:', req.body)
   console.log('HEADERS:', req.headers)
   console.log(' ****************** \n\n')
+
+  next()
+}
+
+function authenticateRequest(req, res, next) {
+  console.log('REQUEST is valid and authenticated')
+
+  next()
+}
+
+function validateTodoRequest(req, res, next) {
+  console.log('Validating todo request')
+  let body = req.body
+  if(body.description == undefined || 
+    body.description.length == 0 ||
+    body.user_id == undefined || 
+    body.user_id.length == 0 ||
+    body.status == undefined ||
+    body.status.length == 0) { 
+    return res.status(400).send({ message : 'description, user_id and status are required'})
+  }
+
+  let status = body.status
+  console.log('status:', status)
+  if(validateStatus(status)) { 
+    return res.status(400).send({ message : 'status should be In Progress, Done or New'})
+  }
+
+  console.log('Todo request is valid')
+  next()
+}
+
+function validateStatus(status) {
+  let validStatuses = ['In Progress', 'Done', 'New']
+  return validStatuses.includes(status)
 }
