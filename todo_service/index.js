@@ -99,8 +99,10 @@ app.get('/users/:id', (req, res) => {
 
 
 
-  app.get('/todos', (req, res) => {
-    console.log(req.query)
+  app.get('/todos', (req, res, next) => {
+    logRequest(req)
+    next()
+  }, (req, res) => {
     let user_id = req.query.user_id
     let status = req.query.status
 
@@ -141,7 +143,10 @@ app.get('/todos/:user_id', (req, res) => {
   });
 
 
-  app.post('/todos', (req, res) => {
+  app.post('/todos', (req, res, next) => {
+    logRequest(req)
+    next()
+  }, (req, res) => {
     const todolist = req.body;
     const query = 'insert into  todos set ?';
     db.query(query, todolist, (err, results) => {
@@ -191,3 +196,15 @@ app.listen(3000, () => {
     console.log('Server is running on port 3000')
 })
 
+
+
+function logRequest(req) {
+  console.log('\n\n ******************')
+  console.log('RECEIVED REQUEST ON: ', req.route.path)
+  console.log('REQUEST METHOD: ', req.method)
+  console.log('QUERY PARAMS:', req.query)
+  console.log('URL PARAMS:', req.params)
+  console.log('BODY:', req.body)
+  console.log('HEADERS:', req.headers)
+  console.log(' ****************** \n\n')
+}
