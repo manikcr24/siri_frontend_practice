@@ -246,8 +246,29 @@ function authenticateUser(req, res, next) {
   console.log('Authenticating user')
   const headers = req.headers
 
-  let userEmail = headers.email
-  let userPassword = headers.password
+  console.log(headers)
+
+  const authHeader = headers.authorization
+  
+  // Basic c2lyaTExMDlAZ21haWwuY29tOmFiY2Rl
+
+  let arr = authHeader.split(' ')
+
+  let token = arr[1]
+  let decodedToken = ''
+    try {
+      decodedToken = atob(token)
+    } catch(err) {
+  
+      console.log('Error decoding token', err)
+      return res.status(401).send({ message : 'Unauthorized - Invalid token'})
+    }
+
+  let creds = decodedToken.split(':')
+  let userEmail = creds[0]
+  let userPassword = creds[1]
+
+
 
   const query = 'select * from users where email = ?';
     db.query(query, userEmail, (err, results) => {
