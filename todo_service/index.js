@@ -99,8 +99,8 @@ app.get('/users/:id', (req, res) => {
 
 
 
-  app.get('/todos', logRequestMiddleware, (req, res) => {
-    let user_id = req.query.user_id
+  app.get('/todos', logRequestMiddleware, authenticateUser, (req, res) => {
+    let user_id = req.userdata.userid
     let status = req.query.status
 
     if(user_id == undefined) {
@@ -238,4 +238,34 @@ function validateTodoRequest(req, res, next) {
 function validateStatus(status) {
   let validStatuses = ['In Progress', 'Done', 'New']
   return validStatuses.includes(status)
+}
+
+
+
+function authenticateUser(req, res, next) {
+  console.log('Authenticating user')
+  const headers = req.headers
+
+  let userEmail = headers.email
+  let userPassword = headers.password
+
+  const query = 'select * from users where email = ?';
+    db.query(query, userEmail, (err, results) => {
+      if (err) {
+        console.error('Error creating todos', err);
+        res.status(500).send({ message: 'Error creating todos' });
+      } else {
+        let user = results[0]
+        let actualPassword = user.password
+
+        if(actualPassword != userPassword) {
+          return res.status(401).send({ message : 'Unauthorized'})
+        }
+        
+        console.log('User authenticated')
+
+        req.userdata = {userid: user.id}
+        next();
+      }
+    });
 }
